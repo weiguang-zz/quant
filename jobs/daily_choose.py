@@ -18,6 +18,7 @@ def choose():
     kcodes = ks.screen()
 
     body = 'macd:%s\nkdj:%s' % (mscodes,kcodes)
+    logging.info('send email:%s' % body)
     utils.send_mail(['zhengzhang23@creditease.cn'],'choose results',body=body)
 
     logging.info('done')

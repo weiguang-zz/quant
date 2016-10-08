@@ -57,14 +57,14 @@ def send_mail(to_list, subject, body, format='plain', attachFileName=None):
     outer.attach(textPart)
 
     try:
-        s = smtplib.SMTP()
-        s.connect("smtp.qq.com", 25)
-        s.login("812674168", "zhang4306364")
+        s = smtplib.SMTP('smtp.qq.com')
+        # s.connect("")
+        s.login("812674168", "yurdolniuolybbea")
         s.sendmail(outer['From'], to_list, outer.as_string())
         s.close()
         return True
-    except Exception:
-        logging.info('send email error')
+    except Exception as e:
+        logging.info('send email error',e)
         return False
 
 
@@ -74,3 +74,7 @@ def set_logconf():
 
     #logging的配置
     logging.config.fileConfig(ppath+"/conf/log.prop" if ppath else "conf/log.prop")
+
+if __name__=='__main__':
+    set_logconf()
+    send_mail(['zhengzhang23@creditease.cn'],'tt','body')
