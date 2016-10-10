@@ -18,7 +18,7 @@ if __name__=='__main__':
     utils.set_logconf()
     logging.info("app started")
     schedule.every().day.at('09:00').do(sync.sync_last_day)#每天上午9点同步数据
-    schedule.every().day.at('10:00').do(daily_choose)
+    schedule.every().day.at('10:00').do(daily_choose.choose)
     while True:
         schedule.run_pending()
         time.sleep(1)
