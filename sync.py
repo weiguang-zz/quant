@@ -88,11 +88,12 @@ def sync_last_day(force=False):
             os.remove(download_path)
             return
         else:
+            logging.info("start to merge the daily data and the whole data")
             names = ['code', 'date', 'open', 'high', 'low', 'close', 'volumn'
                 , 'dividends', 'split_ratio', 'adj.open', 'adj.high', 'adj.low'
                 , 'adj.close', 'adj.volumn']
             dailydf = pd.read_csv(z.open(f), header=None, names=names)
-            alldf = pd.read_pickle(wf)
+            alldf = pd.read_pickle(os.path.join(ppath,wf))
             merged = pd.concat((alldf,dailydf))
             the_new_pickle_path = os.path.join(ppath,'%s_%s' % (PICKLE_FILE_PATH_PREFIX, ddstr))
 
