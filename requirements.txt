@@ -5,3 +5,4 @@ TA-Lib
 requests
 schedule
 quandl
+matplotlib
