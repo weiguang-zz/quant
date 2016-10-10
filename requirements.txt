@@ -1,0 +1,7 @@
+pandas
+notebook
+jupyter
+TA-Lib
+requests
+schedule
+quandl

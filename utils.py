@@ -75,6 +75,8 @@ def set_logconf():
     #logging的配置
     logging.config.fileConfig(ppath+"/conf/log.prop" if ppath else "conf/log.prop")
 
+    os.chdir(ppath)#设置执行目录为项目的主目录
+
 if __name__=='__main__':
     set_logconf()
     send_mail(['zhengzhang23@creditease.cn'],'tt','body')

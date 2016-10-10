@@ -13,9 +13,6 @@ import sync
 from jobs import daily_choose
 
 
-while 1:
-    schedule.run_pending()
-    time.sleep(1)
 
 if __name__=='__main__':
     utils.set_logconf()
