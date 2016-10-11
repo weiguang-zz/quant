@@ -19,12 +19,12 @@ class PriceScreen(object):
         self.wholedata = wholedata#存储所有股票每天的价格数据的Dataframe
         self.prescreen = prescreen
 
-    def screen_one(self,code):
+    def screen_one(self,code,data):
         if self.prescreen:
-            resu = self.prescreen.screen_one(code)
+            resu = self.prescreen.screen_one(code,data)
             if not resu:
                 return False
-        return self.check(code)
+        return self.check(code,data)
 
     def check(self,code):
         '''
@@ -34,16 +34,12 @@ class PriceScreen(object):
         '''
         raise NotImplementedError()
     def screen(self):
-        codes = self.wholedata.code.unique()
         valid_codes = []
-        count = 0
-        for code in codes:
-            if self.screen_one(code):
-                valid_codes.append(code)
-            count += 1
-            if count % 20 == 0:
-                logging.info('%.2f completed' % (float(count)/len(codes)))
+        for name,group in self.wholedata.groupby('code'):
+            if self.screen_one(name,group):
+                valid_codes.append(name)
         return valid_codes
+
 
 class MACDScreen(PriceScreen):
 
@@ -54,14 +50,14 @@ class MACDScreen(PriceScreen):
         self.slowperiod = slowperiod
         self.signalperiod = signalperiod
 
-    def check(self,code):
+    def check(self,code,data):
         '''
         基于MACD指标,返回上个交易日出现金叉的股票
         :return:
         '''
-        logging.info('macd start to process  %s' % code)
-        prefixL = code[0].upper()
-        data = self.wholedata[self.wholedata.code==code].sort_values('date')
+        # logging.info('macd start to process  %s' % code)
+        # prefixL = code[0].upper()
+        # data = self.wholedata[self.wholedata.code==code].sort_values('date')
 
         macd, macdsignal, macdhist = talib.MACD(data['adj.close'].values,fastperiod=self.fastperiod
                                                 , slowperiod=self.slowperiod, signalperiod=self.signalperiod)
@@ -91,15 +87,13 @@ class KDJScreen(PriceScreen):
         self.slowk_period = slowk_period
         self.slowd_period = slowd_period
 
-    def check(self,code):
-        logging.info('kdj start to process %s' % code)
-        firstc = code[0]
-        daily_data = self.wholedata[self.wholedata.code==code]
-        high = daily_data['adj.high'].values
-        low = daily_data['adj.low'].values
-        close = daily_data['adj.close'].values
+    def check(self,code,data):
+
+        high = data['adj.high'].values
+        low = data['adj.low'].values
+        close = data['adj.close'].values
         k, d = talib.STOCH(high, low, close,fastk_period=self.fastk_period,slowk_period=self.slowk_period,slowd_period=self.slowd_period)
-        df = pd.DataFrame(data={'k': k, 'd': d}, index=daily_data.date)
+        df = pd.DataFrame(data={'k': k, 'd': d}, index=data.date)
         df['j'] = 3 * df['k'] - 2 * df['d']
         if df['k'][-1] <= 25 and df['k'][-1] > df['d'][-1] \
                 and df['k'][-2] < df['d'][-2]:
