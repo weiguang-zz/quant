@@ -7,3 +7,5 @@ schedule
 quandl
 matplotlib
 Flask-APScheduler
+flask_sqlalchemy
+flask_restful

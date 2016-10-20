@@ -61,7 +61,7 @@ class Config(object):
 
 
     SCHEDULER_VIEWS_ENABLED = True
-
+    SCHEDULER_TIMEZONE = 'Asia/Shanghai'
 
 
 
