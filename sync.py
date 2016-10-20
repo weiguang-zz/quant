@@ -128,6 +128,10 @@ def resume_download(url,filename,chunk_size=4096):
                 # done = int(50 * dl / total_length)
                 sys.stdout.write("\r[%s%%]" % pct)
                 sys.stdout.flush()
+
+def job1(a, b):
+    logging.info(str(a) + ' ' + str(b))
+
 if __name__ == '__main__':
     utils.set_logconf()
     sync_last_day()
