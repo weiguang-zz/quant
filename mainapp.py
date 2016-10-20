@@ -93,6 +93,9 @@ class MACD(Resource):
         return ms.screen(),200
 #同步服务的endpoint
 class Sync(Resource):
+    def __init__(self):
+        self.is_whole_running = False
+        self.is_daily_running = False
     def get(self,sync_type):
         global _datas
         if sync_type=='whole' and not self.is_whole_running:
@@ -103,13 +106,13 @@ class Sync(Resource):
             self.is_whole_running = False
             return 'success'
         elif sync_type=='daily' and not self.is_daily_running:
-            self.is_daily_running = True;
+            self.is_daily_running = True
             sync_last_day()
             _datas = None
             self.is_daily_running = False
             return 'success'
         else:
-            return 'not support sync_type:%s' % sync_type
+            return 'not support sync_type:%s or the sync is running' % sync_type
 
 api.add_resource(KDJ,'/kdj')
 api.add_resource(MACD,'/macd')
