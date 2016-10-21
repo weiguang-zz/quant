@@ -109,10 +109,10 @@ def sync_last_day(force=False):
 def resume_download(url,filename,chunk_size=4096):
 
     with open(filename, "ab") as f:
-        logging.info("Downloading %s" % filename)
+        logging.info("Downloading %s" % url)
         downloaded_bytes = f.tell()
         resume_header = {'Range': 'bytes=%d-' % downloaded_bytes}
-        response = requests.get(url, stream=True, headers=resume_header,verify=False,timeout=(3,5))
+        response = requests.get(url, stream=True, headers=resume_header,verify=True, timeout=(3,5))
 
         total_length = response.headers.get('content-length')
 
