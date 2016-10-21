@@ -13,8 +13,12 @@ from sync import sync_whole,sync_last_day
 import threading
 from flask_apscheduler import APScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from threading import Thread,Lock
+from utils import synchronized
+_lock = Lock()
 
 _datas = None
+@synchronized(_lock)
 def _get_datas():
     global _datas
     if _datas is not None:
@@ -23,7 +27,6 @@ def _get_datas():
     filename = glob.glob1(utils.get_absolute_path("datas"),'whole_data.pickle*')[0]
     _datas = pd.read_pickle(os.path.join(utils.get_absolute_path("datas"),filename))
     return _datas
-# quandl.ApiConfig.api_key='ZB_kT6_ftbkEqJMLnXeH'
 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost:3306/quant'
@@ -129,4 +132,4 @@ api.add_resource(AssetPriceData,'/price_data/<string:code>')
 
 if __name__ == '__main__':
     utils.set_logconf()
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', threaded=True)

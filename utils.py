@@ -14,6 +14,19 @@ from xml.dom import minidom
 import os
 import logging.config
 
+def synchronized(lock):
+    """ Synchronization decorator. """
+
+    def wrap(f):
+        def newFunction(*args, **kw):
+            lock.acquire()
+            try:
+                return f(*args, **kw)
+            finally:
+                lock.release()
+        return newFunction
+    return wrap
+
 def get_module_path():
     return os.path.dirname(__file__)
 
