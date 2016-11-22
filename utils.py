@@ -92,4 +92,4 @@ def set_logconf():
 
 if __name__=='__main__':
     set_logconf()
-    send_mail(['zhengzhang23@creditease.cn'],'tt','body')
+    send_mail(['13240811524@163.com'],'tt','body')
